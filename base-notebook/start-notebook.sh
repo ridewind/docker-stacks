@@ -9,6 +9,23 @@ if [[ "${RESTARTABLE}" == "yes" ]]; then
     wrapper="run-one-constantly"
 fi
 
+DOC_PATH=${DOC_PATH:-"/home/share"}
+
+if [ -n "$ACTIVE_DOC" ]; then
+    cp -r $DOC_PATH/$ACTIVE_DOC/* /home/jovyan/work/
+    # chown -R 1000:100 /home/jovyan/work/$ACTIVE_DOC
+fi
+
+if [ -d "/certificate" ]; then
+    echo -e "c.NotebookApp.certfile = u'/certificate/fullchain.cer'" >> /etc/jupyter/jupyter_notebook_config.py
+    echo -e "c.NotebookApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_notebook_config.py
+    sed -ri 's/http/https/g' /etc/jupyter/jupyter_notebook_config.py
+    
+    echo -e "c.ServerApp.certfile = u'/certificate/fullchain.cer'" >> /etc/jupyter/jupyter_server_config.py
+    echo -e "c.ServerApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_server_config.py
+    sed -ri 's/http/https/g' /etc/jupyter/jupyter_server_config.py
+fi
+
 if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
     # launched by JupyterHub, use single-user entrypoint
     exec /usr/local/bin/start-singleuser.sh "$@"
