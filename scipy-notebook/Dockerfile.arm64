@@ -1,0 +1,35 @@
+ARG BASE_CONTAINER=ailab/kp-base-notebook:1.0
+FROM $BASE_CONTAINER
+
+LABEL maintainer="Jupyter Project for Scipy Notebook on Kunpeng ARM64 <iahuohz@hotmail.com>"
+
+USER root
+
+# ffmpeg for matplotlib anim
+RUN apt-get update && \
+    apt-get install -yq --no-install-recommends build-essential ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+
+USER $NB_UID
+
+# Install Python 3 packages
+RUN conda install --yes \
+    'pillow' \
+    'cython=0.29*' \
+    'scipy=1.4.1' \
+    'matplotlib=3.2.*' \
+    'pandas=1.0.2' \
+    'scikit-learn=0.22*' \
+    && \
+    conda clean --all -y && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf /home/$NB_USER/.node-gyp && \
+    fix-permissions $CONDA_DIR && \
+    fix-permissions /home/$NB_USER
+
+# Import matplotlib the first time to build the font cache.
+ENV XDG_CACHE_HOME /home/$NB_USER/.cache/
+RUN MPLBACKEND=Agg python -c "import matplotlib.pyplot" && \
+    fix-permissions /home/$NB_USER
+
+USER $NB_UID
