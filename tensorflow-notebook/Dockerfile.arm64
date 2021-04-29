@@ -1,0 +1,21 @@
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG BASE_CONTAINER=jupyter/scipy-notebook
+FROM $BASE_CONTAINER
+
+LABEL maintainer="Jupyter Project For zretc.net <yangfei007@chinasofti.com>"
+
+# Install Tensorflow
+#ARG TENSORFLOW_WHL=tensorflow-2.1.0-cp37-cp37m-linux_aarch64.whl
+#ADD $TENSORFLOW_WHL /home/jovyan/$TENSORFLOW_WHL
+ARG TENSORFLOW_WHL=tensorflow-2.4.0-cp37-none-linux_aarch64.whl
+RUN wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.4.0/tensorflow-2.4.0-cp37-none-linux_aarch64.whl -O /home/jovyan/$TENSORFLOW_WHL
+RUN pip install --quiet --no-cache-dir --user \
+    $TENSORFLOW_WHL && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}" && \
+    conda clean --all -y && \
+    rm -rf /home/$NB_USER/.cache/yarn && \
+    rm -rf /home/$NB_USER/.node-gyp && \
+    rm -f $TENSORFLOW_WHL
+
