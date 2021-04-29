@@ -17,7 +17,7 @@ docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:amd64-v2.00
 
 docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:amd64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-pytorch:amd64-v2.00 -f ./pytorch-notebook/Dockerfile --platform=linux/amd64 ./pytorch-notebook -o type=image,push=true
 
-docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:amd64-v2.00
+docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-pytorch:amd64-v2.00
 
 docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:amd64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-tensorflow:amd64-v2.00 -f ./tensorflow-notebook/Dockerfile --platform=linux/amd64 ./tensorflow-notebook -o type=image,push=true
 
