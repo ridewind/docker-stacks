@@ -16,6 +16,10 @@ if [ -n "$ACTIVE_DOC" ]; then
     # chown -R 1000:100 /home/jovyan/work/$ACTIVE_DOC
 fi
 
+if [ -n "$ZKER_VOL" ]; then
+    sudo chown 1000 $ZKER_VOL
+fi
+
 if [ -d "/certificate" ]; then
     echo -e "c.NotebookApp.certfile = u'/certificate/fullchain.cer'" >> /etc/jupyter/jupyter_notebook_config.py
     echo -e "c.NotebookApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_notebook_config.py
@@ -25,6 +29,13 @@ if [ -d "/certificate" ]; then
     echo -e "c.ServerApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_server_config.py
     sed -ri 's/http/https/g' /etc/jupyter/jupyter_server_config.py
 fi
+
+if [ -f ~/.ssh/zker_rsa.pub ]; then
+    sudo chown 1000 ~/.ssh
+    cat ~/.ssh/zker_rsa.pub >> ~/.ssh/authorized_keys
+    chmod 600 ~/.ssh/authorized_keys
+fi
+sudo service ssh start
 
 if [[ ! -z "${JUPYTERHUB_API_TOKEN}" ]]; then
     # launched by JupyterHub, use single-user entrypoint

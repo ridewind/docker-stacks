@@ -13,6 +13,7 @@ c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.token=''
 c.NotebookApp.notebook_dir='/home/jovyan/work'
+c.NotebookApp.disable_check_xsrf = True
 c.NotebookApp.tornado_settings = {
     "headers": {
         "Content-Security-Policy": "frame-ancestors self http://*:*; report-uri /api/security/csp-report"

@@ -3,7 +3,7 @@
 ARG BASE_CONTAINER=jupyter/scipy-notebook
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="Jupyter Project For zretc.net <yangfei007@chinasofti.com>"
 
 # Fix DL4006
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]

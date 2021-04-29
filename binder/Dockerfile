@@ -5,7 +5,7 @@
 ARG BASE_CONTAINER=jupyter/base-notebook:aec555e49be6
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="Jupyter Project For zretc.net <yangfei007@chinasofti.com>"
 ENV TAG="aec555e49be6"
 
 COPY binder/README.ipynb .

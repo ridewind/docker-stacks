@@ -11,7 +11,7 @@
 +# Ubuntu image 
 +FROM ppc64le/ubuntu:trusty
  
--MAINTAINER Jupyter Project <jupyter@googlegroups.com>
+-MAINTAINER Jupyter Project For zretc.net <yangfei007@chinasofti.com>
 +MAINTAINER Ilsiyar Gaynutdinov <ilsiyar_gaynutdinov@ru.ibm.com>
  
  USER root

@@ -9,7 +9,7 @@ ARG ROOT_CONTAINER=ubuntu:20.04
 ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+LABEL maintainer="Jupyter Project For zretc.net <yangfei007@chinasofti.com>"
 ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
@@ -52,10 +52,20 @@ RUN apt-get -q update \
     locales \
     fonts-liberation \
     run-one \
+    openssh-server \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
+RUN mkdir -p /var/lib/locales/supported.d/ && \
+    cp /usr/share/i18n/SUPPORTED /var/lib/locales/supported.d/local && \
+    cd /var/lib/locales/supported.d/ && \
+    cat local  |grep "en_US.UTF-8 UTF-8" > 1.txt && \
+    cat local  |grep "zh_CN.UTF-8 UTF-8" >> 1.txt && \
+    rm -rf local && mv 1.txt  local && \
+    locale-gen  --purge && \
+    locale
+
+### Set TimeZone
+ADD Shanghai /etc/localtime
 
 # Configure environment
 ENV CONDA_DIR=/opt/conda \
@@ -63,9 +73,9 @@ ENV CONDA_DIR=/opt/conda \
     NB_USER=$NB_USER \
     NB_UID=$NB_UID \
     NB_GID=$NB_GID \
-    LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8
+    LC_ALL=zh_CN.UTF-8 \
+    LANG=zh_CN.UTF-8 \
+    LANGUAGE=zh_CN.UTF-8
 ENV PATH=$CONDA_DIR/bin:$PATH \
     HOME=/home/$NB_USER \
     CONDA_VERSION="${conda_version}" \
@@ -145,7 +155,10 @@ RUN conda install --quiet --yes \
 
 EXPOSE 8888
 
-ENV LANGUAGE zh_CN
+COPY jupyterlab_language_pack_zh_CN-0.0.1.dev0-py2.py3-none-any.whl /tmp/
+RUN pip install jupyterlab_language_pack_zh_CN-0.0.1.dev0-py2.py3-none-any.whl && \
+    mkdir -p /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/translation-extension && \
+    echo "{\"locale\": \"zh_CN\"}" > /home/jovyan/.jupyter/lab/user-settings/@jupyterlab/translation-extension/plugin.jupyterlab-settings
 
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]
