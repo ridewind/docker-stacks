@@ -29,13 +29,17 @@ docker buildx build -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-base:arm64-
 
 docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-base:arm64-v2.00
 
-docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-base:arm64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:arm64-v2.00 -f ./scipy-notebook/Dockerfile.arm64 --platform=linux/arm64 ./scipy-notebook -o type=image,push=true
+docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-base:arm64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-minimal:arm64-v2.00 -f ./minimal-notebook/Dockerfile --platform=linux/arm64 ./minimal-notebook -o type=image,push=true
+
+docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-minimal:arm64-v2.00
+
+docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-minimal:arm64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:arm64-v2.00 -f ./scipy-notebook/Dockerfile.arm64 --platform=linux/arm64 ./scipy-notebook -o type=image,push=true
 
 docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:arm64-v2.00
 
 docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:arm64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-pytorch:arm64-v2.00 -f ./pytorch-notebook/Dockerfile.arm64 --platform=linux/arm64 ./pytorch-notebook -o type=image,push=true
 
-docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-tensorflow:arm64-v2.00
+docker pull swr.cn-north-4.myhuaweicloud.com/zker/jupyter-pytorch:arm64-v2.00
 
 docker buildx build --build-arg BASE_CONTAINER=swr.cn-north-4.myhuaweicloud.com/zker/jupyter-scipy:arm64-v2.00 -t swr.cn-north-4.myhuaweicloud.com/zker/jupyter-tensorflow:arm64-v2.00 -f ./tensorflow-notebook/Dockerfile.arm64 --platform=linux/arm64 ./tensorflow-notebook -o type=image,push=true
 
