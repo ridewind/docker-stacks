@@ -9,7 +9,7 @@ if [[ "${RESTARTABLE}" == "yes" ]]; then
     wrapper="run-one-constantly"
 fi
 
-DOC_PATH=${DOC_PATH:-"/home/share"}
+DOC_PATH=${DOC_PATH:-"/home/share/notebook"}
 
 if [ -n "$ACTIVE_DOC" ]; then
     cp -r $DOC_PATH/$ACTIVE_DOC/* /home/jovyan/work/
@@ -18,6 +18,18 @@ fi
 
 if [ -n "$ZKER_VOL" ]; then
     sudo chown 1000 $ZKER_VOL
+    if [ -n "$CASE_ID" ]; then
+        mkdir -p $ZKER_VOL/cases/$CASE_ID
+        rm -rf /home/jovyan/work
+        ln -s $ZKER_VOL/cases/$CASE_ID /home/jovyan/work
+        if [ `ls -A /home/jovyan/work | wc -w` == 0 ] ; then
+            cp -r $DOC_PATH/* /home/jovyan/work/
+        fi
+        rm -rf /home/jovyan/work/dataset
+        if [ -d "/home/share/dataset" ]; then
+            ln -s /home/share/dataset /home/jovyan/work/dataset
+        fi
+    fi
 fi
 
 if [ -d "/certificate" ]; then
