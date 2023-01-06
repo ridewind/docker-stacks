@@ -35,11 +35,11 @@ fi
 if [ -d "/certificate" ]; then
     echo -e "c.NotebookApp.certfile = u'/certificate/fullchain.cer'" >> /etc/jupyter/jupyter_notebook_config.py
     echo -e "c.NotebookApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_notebook_config.py
-    sed -ri 's/http/https/g' /etc/jupyter/jupyter_notebook_config.py
+    sed -ri 's/http:/https:/g' /etc/jupyter/jupyter_notebook_config.py
     
     echo -e "c.ServerApp.certfile = u'/certificate/fullchain.cer'" >> /etc/jupyter/jupyter_server_config.py
     echo -e "c.ServerApp.keyfile = u'/certificate/privatekey.key'" >> /etc/jupyter/jupyter_server_config.py
-    sed -ri 's/http/https/g' /etc/jupyter/jupyter_server_config.py
+    sed -ri 's/http:/https:/g' /etc/jupyter/jupyter_server_config.py
 fi
 
 if [ -f ~/.ssh/zker_rsa.pub ]; then
